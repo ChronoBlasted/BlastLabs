@@ -1,4 +1,5 @@
 using BaseTemplate.Behaviours;
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -25,6 +26,8 @@ public class LoadSceneManager : MonoSingleton<LoadSceneManager>
     {
         _loading = true;
 
+        LoadSceneUIManager.Instance.HandleOpenLoadPanel();
+
         AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("MainScene");
 
         while (!asyncLoad.isDone)
@@ -35,5 +38,10 @@ public class LoadSceneManager : MonoSingleton<LoadSceneManager>
 
             await Task.Yield();
         }
+    }
+
+    private void OnDestroy()
+    {
+        DOTween.KillAll();
     }
 }

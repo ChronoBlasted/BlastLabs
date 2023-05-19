@@ -34,6 +34,8 @@ public class AuthentificationManager : MonoSingleton<AuthentificationManager>
             Debug.Log("Authenticated with Device ID");
 
             _nakamaManager.SetSession(session);
+
+            LoadSceneManager.Instance.LoadMainLevel();
         }
         catch (ApiResponseException ex)
         {
@@ -54,6 +56,8 @@ public class AuthentificationManager : MonoSingleton<AuthentificationManager>
                     Debug.Log("Authenticated with Facebook");
 
                     _nakamaManager.SetSession(session);
+
+                    LoadSceneManager.Instance.LoadMainLevel();
                 }
                 catch (ApiResponseException ex)
                 {

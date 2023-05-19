@@ -25,6 +25,9 @@ public class NakamaManager : MonoSingleton<NakamaManager>
     public void SetSession(ISession session)
     {
         _session = session;
+
+
+
     }
 
     public void Init()
