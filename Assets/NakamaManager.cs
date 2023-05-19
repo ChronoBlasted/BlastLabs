@@ -8,13 +8,14 @@ using UnityEngine;
 
 public class NakamaManager : MonoSingleton<NakamaManager>
 {
-    [SerializeField] AuthentificationManager AuthentificationManager;
+    [SerializeField] AuthentificationManager _authentificationManager;
 
     ISession _session;
     IClient _client;
 
     public ISession Session { get => _session; }
     public IClient Client { get => _client; }
+    public AuthentificationManager AuthentificationManager { get => _authentificationManager; }
 
     public void SetClient(IClient newClient)
     {
@@ -26,7 +27,7 @@ public class NakamaManager : MonoSingleton<NakamaManager>
         _session = session;
     }
 
-    private void Awake()
+    public void Init()
     {
         DontDestroyOnLoad(this);
 

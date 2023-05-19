@@ -12,8 +12,6 @@ public class BlankPanel : Panel
     public override void OpenPanel()
     {
         base.OpenPanel();
-
-
     }
 
     public override void ClosePanel()
