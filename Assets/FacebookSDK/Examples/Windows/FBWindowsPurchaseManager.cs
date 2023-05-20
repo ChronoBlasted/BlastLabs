@@ -12,6 +12,7 @@ public class FBWindowsPurchaseManager : MonoBehaviour
     public Transform PurchasesPanelTarnsform;
 
     // IN APP PURCHASES CATALOG FUNCTIONS ----------------------------------------------------------------------------------------------------------
+    [System.Obsolete]
     public void GetCatalogButton()
     {
         if (FB.IsLoggedIn)
@@ -25,6 +26,7 @@ public class FBWindowsPurchaseManager : MonoBehaviour
         }
     }
 
+    [System.Obsolete]
     private void ProcessGetCatalog(ICatalogResult result)
     {
         foreach (Transform child in CatalogPanelTarnsform)
@@ -65,6 +67,7 @@ public class FBWindowsPurchaseManager : MonoBehaviour
         }
     }
 
+    [System.Obsolete]
     IEnumerator LoadPictureFromUrl(string url, RawImage itemImage)
     {
         Texture2D UserPicture = new Texture2D(32, 32);

@@ -12,7 +12,7 @@ public class FBWindowsLoginManager : MonoBehaviour
     public RawImage UserImage;
     public Text UserName;
 
-
+    [Obsolete]
     public void LogInReadButton()
     {
         if (FB.IsInitialized)
@@ -25,6 +25,7 @@ public class FBWindowsLoginManager : MonoBehaviour
         }
     }
 
+    [Obsolete]
     public void LogInPublishButton()
     {
         if (FB.IsInitialized)
@@ -50,6 +51,7 @@ public class FBWindowsLoginManager : MonoBehaviour
         }
     }
 
+    [Obsolete]
     private void AuthCallback(ILoginResult result)
     {
         if (result.Error != null)
@@ -79,6 +81,7 @@ public class FBWindowsLoginManager : MonoBehaviour
         }
     }
 
+    [Obsolete]
     public void GetCurrentProfile()
     {
         Logger.DebugLog("Getting current user profile ...");
@@ -122,6 +125,7 @@ public class FBWindowsLoginManager : MonoBehaviour
         });
     }
 
+    [Obsolete]
     IEnumerator LoadPictureFromUrl(string url, RawImage itemImage)
     {
         Texture2D UserPicture = new Texture2D(32, 32);

@@ -4,6 +4,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
 public enum GameState { MENU, GAME, PAUSE, END, WAIT }
@@ -20,16 +21,22 @@ public class GameManager : MonoSingleton<GameManager>
     {
         Time.timeScale = 1;
 
+        NakamaManager.Instance.AccountManager.Init();
+
+        NakamaManager.Instance.MatchmakingManager.Init();
+
         PoolManager.Instance.Init();
 
         ProfileManager.Instance.Init();
 
         UIManager.Instance.Init();
+
+        UpdateStateToMenu();
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.R))
+        if (Keyboard.current.rKey.isPressed)
         {
             ReloadScene();
         }
@@ -39,27 +46,33 @@ public class GameManager : MonoSingleton<GameManager>
     {
         _gameState = newState;
 
-        switch (_gameState)
+        Debug.Log("New GameState : " + _gameState);
+
+        UnityMainThreadDispatcher.Instance.Enqueue(() =>
         {
-            case GameState.MENU:
-                HandleMenu();
-                break;
-            case GameState.GAME:
-                HandleGame();
-                break;
-            case GameState.PAUSE:
-                HandlePause();
-                break;
-            case GameState.END:
-                HandleEnd();
-                break;
-            case GameState.WAIT:
-                HandleWait();
-                break;
-            default:
-                break;
-        }
-        OnGameStateChanged?.Invoke(_gameState);
+            switch (_gameState)
+            {
+                case GameState.MENU:
+                    HandleMenu();
+                    break;
+                case GameState.GAME:
+                    HandleGame();
+                    break;
+                case GameState.PAUSE:
+                    HandlePause();
+                    break;
+                case GameState.END:
+                    HandleEnd();
+                    break;
+                case GameState.WAIT:
+                    HandleWait();
+                    break;
+                default:
+                    break;
+            }
+
+            OnGameStateChanged?.Invoke(_gameState);
+        });
     }
 
     void HandleMenu()

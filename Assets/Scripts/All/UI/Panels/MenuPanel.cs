@@ -19,9 +19,5 @@ public class MenuPanel : Panel
         base.ClosePanel();
     }
 
-
-    #region Feedbacks
-
-
-    #endregion
+    public void FindMatchPVP() => NakamaManager.Instance.MatchmakingManager.FindMatch();
 }

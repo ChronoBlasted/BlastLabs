@@ -1,9 +1,9 @@
 {
   "files": [
-      "./src/main.ts"
+      "src/main.ts"
     ],
   "compilerOptions": {
-    "target": "es2016",
+    "target": "es5",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,

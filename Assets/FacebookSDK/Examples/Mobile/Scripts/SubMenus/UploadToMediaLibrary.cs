@@ -49,7 +49,9 @@ namespace Facebook.Unity.Example
             }
             GUILayout.Space(24);
 
+#pragma warning disable CS0612 // Le type ou le membre est obsolète
             string imagePath = GetPath(imageFile);
+#pragma warning restore CS0612 // Le type ou le membre est obsolète
             if (File.Exists(imagePath))
             {
                 if (this.Button("Upload Image to media library"))
@@ -71,7 +73,9 @@ namespace Facebook.Unity.Example
             }
             GUILayout.Space(24);
 
+#pragma warning disable CS0612 // Le type ou le membre est obsolète
             string videoPath = GetPath(videoFile);
+#pragma warning restore CS0612 // Le type ou le membre est obsolète
             if (File.Exists(videoPath))
             {
                 if (this.Button("Upload Video to media library"))
@@ -85,6 +89,7 @@ namespace Facebook.Unity.Example
             }
         }
 
+        [Obsolete]
         private string GetPath(string filename) {
             string path = Path.Combine(Application.streamingAssetsPath, filename);
 

@@ -13,10 +13,14 @@ public abstract class Panel : MonoBehaviour
         _canvasGroup.blocksRaycasts = false;
         _canvasGroup.interactable = false;
         _canvasGroup.alpha = 0;
+
+        gameObject.SetActive(false);
     }
 
     public virtual void OpenPanel()
     {
+        gameObject.SetActive(true);
+
         _canvasGroup.DOFade(1, .2f).OnComplete(() =>
         {
             _canvasGroup.blocksRaycasts = true;

@@ -1,5 +1,6 @@
 using BaseTemplate.Behaviours;
 using DG.Tweening;
+using Facebook.Unity;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -12,6 +13,19 @@ public class LoadSceneManager : MonoSingleton<LoadSceneManager>
 
     private void Awake()
     {
+        if (!FB.IsInitialized)
+        {
+            LoadSceneUIManager.Instance.AuthentificationPanel.FacebookButton.gameObject.SetActive(false);
+            FB.Init(() =>
+            {
+                LoadSceneUIManager.Instance.AuthentificationPanel.FacebookButton.gameObject.SetActive(true);
+                FB.ActivateApp();
+            });
+        }else
+        {
+            FB.ActivateApp();
+        }
+
         NakamaManager.Instance.Init();
 
         LoadSceneUIManager.Instance.Init();
