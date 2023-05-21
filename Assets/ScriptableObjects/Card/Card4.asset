@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ID: 4
   Name: Tim
-  TopPower: 4
-  BotPower: 4
+  TopPower: 0
+  BotPower: 1
   LeftPower: 4
   RightPower: 4

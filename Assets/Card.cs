@@ -11,7 +11,7 @@ public class Card : MonoBehaviour
     CardData _data;
 
     [SerializeField] TMP_Text _name;
-    [SerializeField] TMP_Text _ID;
+    [SerializeField] TMP_Text _topPower, _rightPower, _bottomPower, _leftPower;
     [SerializeField] Image _bg;
 
     public CardData Data { get => _data; }
@@ -23,8 +23,11 @@ public class Card : MonoBehaviour
         _dragDrop.enabled = true;
         _isPlayerCard = isPlayerCard;
 
+        _topPower.text = _data.TopPower.ToString();
+        _rightPower.text = _data.RightPower.ToString();
+        _bottomPower.text = _data.BotPower.ToString();
+        _leftPower.text = _data.LeftPower.ToString();
 
-        _ID.text = _data.ID.ToString();
         _name.text = _data.Name;
     }
 

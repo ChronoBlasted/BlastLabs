@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ID: 2
   Name: Fabrice
-  TopPower: 2
+  TopPower: 1
   BotPower: 2
   LeftPower: 2
-  RightPower: 2
+  RightPower: 0

@@ -15,6 +15,6 @@ MonoBehaviour:
   ID: 1
   Name: Alexis
   TopPower: 1
-  BotPower: 1
+  BotPower: 2
   LeftPower: 1
-  RightPower: 1
+  RightPower: 2

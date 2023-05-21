@@ -14,3 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ID: 0
   Name: Pascal
+  TopPower: 1
+  BotPower: 0
+  LeftPower: 1
+  RightPower: 0

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ID: 3
   Name: Jeune
-  TopPower: 3
-  BotPower: 3
+  TopPower: 0
+  BotPower: 0
   LeftPower: 3
-  RightPower: 3
+  RightPower: 0

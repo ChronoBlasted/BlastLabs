@@ -4,6 +4,7 @@ using Nakama.TinyJson;
 using System;
 using System.Collections.Generic;
 using System.Net.Sockets;
+using System.Reflection.Emit;
 using System.Text;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -31,6 +32,8 @@ public class MatchManager : MonoSingleton<MatchManager>
         _localPresence = localPresence;
         _oponentPresence = oponentPresence;
         _hostPresence = hostPresence;
+
+        UIManager.Instance.GamePanel.DisablePlayerCards();
 
         _myDeck = CardManager.Instance.GetRandomHand();
 
@@ -90,7 +93,7 @@ public class MatchManager : MonoSingleton<MatchManager>
 
     public async void DropCard(int indexPos, int indexOfCard)
     {
-        if (_matchState == MATCH_STATE.OPONENT_TURN) return;
+        if (_matchState != MATCH_STATE.PLAYER_TURN) return;
 
         var opCode = 2;
 
@@ -104,13 +107,14 @@ public class MatchManager : MonoSingleton<MatchManager>
 
         await _nakamaManager.Socket.SendMatchStateAsync(_match.Id, opCode, JsonWriter.ToJson(state));
 
-        BoardManager.Instance.UpdateAdjacentCard(state.Position, false);
+        if (BoardManager.Instance.UpdateAdjacentCard(state.Position, false) == false)
+        {
+            //Update Turn
+            opCode = 1;
+            await _nakamaManager.Socket.SendMatchStateAsync(_match.Id, opCode, _oponentPresence.SessionId);
 
-        //Update Turn
-        opCode = 1;
-        await _nakamaManager.Socket.SendMatchStateAsync(_match.Id, opCode, _oponentPresence.SessionId);
-
-        UpdateTurn(_oponentPresence.SessionId);
+            UpdateTurn(_oponentPresence.SessionId);
+        }
     }
 
     void UpdateBoard(PositionState state)
@@ -128,7 +132,7 @@ public class MatchManager : MonoSingleton<MatchManager>
 
             UIManager.Instance.GamePanel.ActivePlayerCards();
 
-            BoardManager.Instance.UpdateTurnText(_localPresence.Username);
+            BoardManager.Instance.UpdateTurnText(_localPresence.Username + " turn's");
         }
         else
         {
@@ -136,8 +140,26 @@ public class MatchManager : MonoSingleton<MatchManager>
 
             UIManager.Instance.GamePanel.DisablePlayerCards();
 
-            BoardManager.Instance.UpdateTurnText(_oponentPresence.Username);
+            BoardManager.Instance.UpdateTurnText(_oponentPresence.Username + " turn's");
         }
+    }
+
+    public void MatchEnd(bool playerHaveWin)
+    {
+        _matchState = MATCH_STATE.ENDED;
+
+        UIManager.Instance.GamePanel.DisablePlayerCards();
+
+        if (playerHaveWin)
+        {
+            BoardManager.Instance.UpdateTurnText("You win");
+        }
+        else
+        {
+            BoardManager.Instance.UpdateTurnText("You loose");
+        }
+
+        //GameManager.Instance.UpdateStateToEnd();
     }
 }
 

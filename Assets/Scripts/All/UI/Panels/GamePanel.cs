@@ -7,6 +7,7 @@ using UnityEngine.UI;
 
 public class GamePanel : Panel
 {
+    [SerializeField] TMP_Text _playerScore, _opponentScore;
     [SerializeField] CanvasGroup _cardsCG;
 
     public override void Init()
@@ -40,5 +41,11 @@ public class GamePanel : Panel
         _cardsCG.alpha = 1;
         _cardsCG.interactable = true;
         _cardsCG.blocksRaycasts = true;
+    }
+
+    public void UpdateScore(int playerScore, int opponentScore)
+    {
+        _playerScore.text = playerScore.ToString();
+        _opponentScore.text = opponentScore.ToString();
     }
 }
