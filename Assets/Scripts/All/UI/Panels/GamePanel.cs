@@ -7,6 +7,7 @@ using UnityEngine.UI;
 
 public class GamePanel : Panel
 {
+    [SerializeField] CanvasGroup _cardsCG;
 
     public override void Init()
     {
@@ -25,5 +26,19 @@ public class GamePanel : Panel
 
     public void StartGame()
     {
+    }
+
+    public void DisablePlayerCards()
+    {
+        _cardsCG.alpha = .6f;
+        _cardsCG.interactable = false;
+        _cardsCG.blocksRaycasts = false;
+    }
+
+    public void ActivePlayerCards()
+    {
+        _cardsCG.alpha = 1;
+        _cardsCG.interactable = true;
+        _cardsCG.blocksRaycasts = true;
     }
 }
