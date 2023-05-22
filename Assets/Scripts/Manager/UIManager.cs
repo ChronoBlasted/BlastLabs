@@ -6,6 +6,8 @@ using UnityEngine;
 
 public class UIManager : MonoSingleton<UIManager>
 {
+
+    [SerializeField] Canvas _mainCanvas;
     [SerializeField] MenuPanel _menuPanel;
     [SerializeField] SettingPanel _settingPanel;
 
@@ -24,6 +26,7 @@ public class UIManager : MonoSingleton<UIManager>
     public PausePanel PausePanel { get => _pausePanel;}
     public EndGamePanel EndGamePanel { get => _endGamePanel;  }
     public BlankPanel BlankPanel { get => _blankPanel;  }
+    public Canvas MainCanvas { get => _mainCanvas;  }
 
     public void Init()
     {

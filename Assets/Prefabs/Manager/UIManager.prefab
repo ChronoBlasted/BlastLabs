@@ -197,6 +197,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c82a25fae32cc9045ba70fe33b5323c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _mainCanvas: {fileID: 6255342203920537914}
   _menuPanel: {fileID: 413134501896411058}
   _settingPanel: {fileID: 26153583269237876}
   _gamePanel: {fileID: 4450996673285965043}

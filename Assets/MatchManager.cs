@@ -22,12 +22,15 @@ public class MatchManager : MonoSingleton<MatchManager>
 
     List<CardData> _myDeck;
 
-    public void Init(IMatch newMatch, IUserPresence localPresence, IUserPresence oponentPresence, IUserPresence hostPresence)
+    public void Init()
     {
         _nakamaManager = NakamaManager.Instance;
 
         _nakamaManager.Socket.ReceivedMatchState += m => UnityMainThreadDispatcher.Instance.Enqueue(() => OnReceivedMatchState(m));
+    }
 
+    public void StartNewMatch(IMatch newMatch, IUserPresence localPresence, IUserPresence oponentPresence, IUserPresence hostPresence)
+    {
         _match = newMatch;
         _localPresence = localPresence;
         _oponentPresence = oponentPresence;
@@ -37,12 +40,7 @@ public class MatchManager : MonoSingleton<MatchManager>
 
         _myDeck = CardManager.Instance.GetRandomHand();
 
-        for (int i = 0; i < _myDeck.Count; i++)
-        {
-            BoardManager.Instance.PlayerCard[i].Init(_myDeck[i], true);
-        }
-
-        BoardManager.Instance.Init();
+        BoardManager.Instance.StartMatch(_myDeck);
 
         //Update UI
 
@@ -52,6 +50,8 @@ public class MatchManager : MonoSingleton<MatchManager>
             var whoStartString = "";
 
             var whoStart = Random.Range(0, 2);
+
+            Debug.Log("WHOSTART" + whoStart);
 
             if (whoStart == 0)
             {
@@ -72,7 +72,7 @@ public class MatchManager : MonoSingleton<MatchManager>
 
     private void OnReceivedMatchState(IMatchState matchState)
     {
-        string messageJson = System.Text.Encoding.UTF8.GetString(matchState.State);
+        string messageJson = Encoding.UTF8.GetString(matchState.State);
 
         Debug.Log(messageJson);
         Debug.Log(matchState.OpCode);
@@ -159,8 +159,10 @@ public class MatchManager : MonoSingleton<MatchManager>
             BoardManager.Instance.UpdateTurnText("You loose");
         }
 
-        //GameManager.Instance.UpdateStateToEnd();
+        GameManager.Instance.UpdateStateToEnd();
     }
+
+
 }
 
 [Serializable]

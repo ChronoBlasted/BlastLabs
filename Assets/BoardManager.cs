@@ -16,18 +16,41 @@ public enum DIRECTION
 public class BoardManager : MonoSingleton<BoardManager>
 {
     [SerializeField] TMP_Text _turnTXT;
-    [SerializeField] List<Card> _playerCard;
+    [SerializeField] Card _playerCard;
+    [SerializeField] List<GameObject> _cardSpawnTransform;
     [SerializeField] List<BoardSlot> _boardSlots = new List<BoardSlot>();
 
     int _playerScore, _opponentScore;
-    public List<Card> PlayerCard { get => _playerCard; }
     public TMP_Text TurnTXT { get => _turnTXT; }
 
-    public void Init()
+    void ResetBoard()
     {
         foreach (var boardSlot in _boardSlots)
         {
             boardSlot.Init();
+        }
+
+        foreach (GameObject child in _cardSpawnTransform)
+        {
+            foreach (Transform c in child.transform)
+            {
+                Destroy(c.gameObject);
+            }
+        }
+
+        UpdateTurnText("");
+
+        UpdateScore();
+    }
+
+    public void StartMatch(List<CardData> playerCards)
+    {
+        ResetBoard();
+
+        for (int i = 0; i < playerCards.Count; i++)
+        {
+            var card = Instantiate(_playerCard, _cardSpawnTransform[i].transform);
+            card.Init(playerCards[i], true);
         }
     }
 
@@ -112,7 +135,6 @@ public class BoardManager : MonoSingleton<BoardManager>
 
     void CheckPower(bool isOpponentDropping, int position, DIRECTION direction)
     {
-
         switch (direction)
         {
             case DIRECTION.TOP:
@@ -165,6 +187,7 @@ public class BoardManager : MonoSingleton<BoardManager>
         else hasPlayerWin = false;
 
         if (isBoardFull) NakamaManager.Instance.MatchManager.MatchEnd(hasPlayerWin);
+
 
         return isBoardFull;
     }

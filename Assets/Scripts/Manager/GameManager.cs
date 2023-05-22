@@ -17,13 +17,15 @@ public class GameManager : MonoSingleton<GameManager>
 
     public GameState GameState { get => _gameState; }
 
-    private void Awake()
+    private async void Awake()
     {
         Time.timeScale = 1;
 
         NakamaManager.Instance.AccountManager.Init();
 
-        NakamaManager.Instance.MatchmakingManager.Init();
+        await NakamaManager.Instance.MatchmakingManager.Init();
+
+        NakamaManager.Instance.MatchManager.Init();
 
         PoolManager.Instance.Init();
 

@@ -13,8 +13,6 @@ public class EndGamePanel : Panel
     public override void OpenPanel()
     {
         base.OpenPanel();
-
-       
     }
 
     public override void ClosePanel()
@@ -24,11 +22,7 @@ public class EndGamePanel : Panel
 
     public void HandleHomeButton()
     {
-
     }
 
-    public void HandleReviveButton()
-    {
-
-    }
+    public void HandleLeaveMatch() => NakamaManager.Instance.MatchmakingManager.LeaveMatch();
 }

@@ -15,6 +15,11 @@ public class BoardSlot : MonoBehaviour
     public void Init()
     {
         _isOccupied = false;
+        if (_currentCard != null)
+        {
+            Destroy(_currentCard.gameObject);
+            _currentCard = null;
+        }
     }
 
     public void DropCard(int indexOfCard, bool isPlayerOrOponent)

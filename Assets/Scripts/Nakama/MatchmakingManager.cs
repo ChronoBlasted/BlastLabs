@@ -22,7 +22,7 @@ public class MatchmakingManager : MonoSingleton<MatchmakingManager>
     IUserPresence _localPresence, _oponentPresence, _hostPresence;
     IMatch _match;
 
-    public async void Init()
+    public async Task Init()
     {
         _nakamaManager = NakamaManager.Instance;
         _gameManager = GameManager.Instance;
@@ -56,7 +56,7 @@ public class MatchmakingManager : MonoSingleton<MatchmakingManager>
         await _nakamaManager.Socket.RemoveMatchmakerAsync(_matchmakerTicket);
     }
 
-    private async void OnReceivedMatchmakerMatched(IMatchmakerMatched matched)
+    async void OnReceivedMatchmakerMatched(IMatchmakerMatched matched)
     {
         var match = await _nakamaManager.Socket.JoinMatchAsync(matched);
 
@@ -73,7 +73,12 @@ public class MatchmakingManager : MonoSingleton<MatchmakingManager>
 
         _gameManager.UpdateStateToGame();
 
-        UnityMainThreadDispatcher.Instance.Enqueue(() => _nakamaManager.MatchManager.Init(_match, _localPresence, _oponentPresence, _hostPresence));
+        UnityMainThreadDispatcher.Instance.Enqueue(() => _nakamaManager.MatchManager.StartNewMatch(_match, _localPresence, _oponentPresence, _hostPresence));
+    }
+
+    public async void LeaveMatch()
+    {
+        await _nakamaManager.Socket.LeaveMatchAsync(_match.Id);
     }
 
     #endregion
