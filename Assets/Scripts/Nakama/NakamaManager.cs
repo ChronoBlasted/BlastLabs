@@ -61,7 +61,7 @@ public class NakamaManager : MonoSingleton<NakamaManager>
     {
         try
         {
-            var client = new Nakama.Client("http", "127.0.0.1", 7350, "defaultkey");
+            var client = new Client("http", "127.0.0.1", 7350, "defaultkey");
             client.Timeout = 10;
 
             SetClient(client);

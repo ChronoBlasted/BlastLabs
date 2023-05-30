@@ -38,11 +38,11 @@ public class MatchManager : MonoSingleton<MatchManager>
 
         UIManager.Instance.GamePanel.DisablePlayerCards();
 
+
+        // Wait for server
         _myDeck = CardManager.Instance.GetRandomHand();
 
         BoardManager.Instance.StartMatch(_myDeck);
-
-        //Update UI
 
         if (_localPresence.SessionId == _hostPresence.SessionId)
         {
@@ -50,8 +50,6 @@ public class MatchManager : MonoSingleton<MatchManager>
             var whoStartString = "";
 
             var whoStart = Random.Range(0, 2);
-
-            Debug.Log("WHOSTART" + whoStart);
 
             if (whoStart == 0)
             {

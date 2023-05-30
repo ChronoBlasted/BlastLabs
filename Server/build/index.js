@@ -1,6 +1,7 @@
 "use strict";
-let InitModule = function (ctx, logger, nk, initializer) {
+var InitModule = function (ctx, logger, nk, initializer) {
     // Hooks
+    initializer.registerAfterAuthenticateDevice(afterAuthenticate);
     initializer.registerAfterAuthenticateFacebook(afterAuthenticate);
     logger.info('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
 };
@@ -9,21 +10,21 @@ function afterAuthenticate(ctx, logger, nk, data) {
         logger.info('User with id: %s account data already existing', ctx.userId);
         return;
     }
-    let user_id = ctx.userId;
-    let username = "Player_" + ctx.username;
-    let metadata = {
+    var user_id = ctx.userId;
+    var username = "Player_" + ctx.username;
+    var metadata = {
         vip: false,
         win: 0,
         loose: 0,
         blast_captured: 0,
         blast_defeated: 0,
     };
-    let displayName = "NewPlayer";
-    let timezone = null;
-    let location = null;
-    let langTag = "EN";
-    let avatarUrl = null;
-    let changeset = {
+    var displayName = "NewPlayer";
+    var timezone = null;
+    var location = null;
+    var langTag = "EN";
+    var avatarUrl = null;
+    var changeset = {
         'coins': 0,
         'gems': 0,
         'rank': 0,
