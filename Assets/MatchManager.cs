@@ -38,34 +38,6 @@ public class MatchManager : MonoSingleton<MatchManager>
 
         UIManager.Instance.GamePanel.DisablePlayerCards();
 
-
-        // Wait for server
-        _myDeck = CardManager.Instance.GetRandomHand();
-
-        BoardManager.Instance.StartMatch(_myDeck);
-
-        if (_localPresence.SessionId == _hostPresence.SessionId)
-        {
-            var opCode = 1;
-            var whoStartString = "";
-
-            var whoStart = Random.Range(0, 2);
-
-            if (whoStart == 0)
-            {
-                _matchState = MATCH_STATE.PLAYER_TURN;
-                whoStartString = localPresence.SessionId;
-            }
-            else
-            {
-                _matchState = MATCH_STATE.OPONENT_TURN;
-                whoStartString = oponentPresence.SessionId;
-            }
-
-            UpdateTurn(whoStartString);
-
-            _nakamaManager.Socket.SendMatchStateAsync(_match.Id, opCode, whoStartString);
-        }
     }
 
     private void OnReceivedMatchState(IMatchState matchState)
@@ -89,37 +61,20 @@ public class MatchManager : MonoSingleton<MatchManager>
         }
     }
 
-    public async void DropCard(int indexPos, int indexOfCard)
+    public bool DropCard(int indexPos, int indexOfCard)
     {
-        if (_matchState != MATCH_STATE.PLAYER_TURN) return;
+        if (_matchState != MATCH_STATE.PLAYER_TURN) return false;
 
-        var opCode = 2;
+        // Try catch with server
 
-        var state = new PositionState
-        {
-            Position = indexPos,
-            IndexOfCard = indexOfCard,
-        };
+        BoardManager.Instance.DropCard(indexPos, indexOfCard, true);
 
-        BoardManager.Instance.DropCard(state.Position, state.IndexOfCard, true);
-
-        await _nakamaManager.Socket.SendMatchStateAsync(_match.Id, opCode, JsonWriter.ToJson(state));
-
-        if (BoardManager.Instance.UpdateAdjacentCard(state.Position, false) == false)
-        {
-            //Update Turn
-            opCode = 1;
-            await _nakamaManager.Socket.SendMatchStateAsync(_match.Id, opCode, _oponentPresence.SessionId);
-
-            UpdateTurn(_oponentPresence.SessionId);
-        }
+        return true;
     }
 
     void UpdateBoard(PositionState state)
     {
         BoardManager.Instance.DropCard(state.Position, state.IndexOfCard, false);
-
-        BoardManager.Instance.UpdateAdjacentCard(state.Position, true);
     }
 
     void UpdateTurn(string sessionIdOfPlayerTurn)

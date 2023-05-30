@@ -86,7 +86,6 @@ GameObject:
   m_Component:
   - component: {fileID: 6535296785370384481}
   - component: {fileID: 2372816799536442207}
-  - component: {fileID: 5739627159743126597}
   - component: {fileID: 8627250134624020765}
   m_Layer: 0
   m_Name: Slot
@@ -136,21 +135,6 @@ MonoBehaviour:
   m_FlexibleWidth: 1
   m_FlexibleHeight: 1
   m_LayoutPriority: 1
---- !u!114 &5739627159743126597
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6086963248427803829}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2c4eed7d463ab4945a7eeac35cd6b294, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _currentCard: {fileID: 0}
-  _boardSlot: {fileID: 8627250134624020765}
-  position: 0
 --- !u!114 &8627250134624020765
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -163,7 +147,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f23b780740d8e84a8f9c6880fbc1d4b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _itemSlot: {fileID: 5739627159743126597}
-  _isOccupied: 0
-  _cardTemp: {fileID: 1754358012972582872, guid: cbe1d88a43e82af468752abba34b5dca, type: 3}
-  _currentCard: {fileID: 0}
+  _opponentCard: {fileID: 1754358012972582872, guid: cbe1d88a43e82af468752abba34b5dca, type: 3}
+  _position: 0

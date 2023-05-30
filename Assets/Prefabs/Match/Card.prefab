@@ -530,7 +530,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6755606470742560544}
-  - component: {fileID: 3046022235593654408}
   - component: {fileID: 7618997423093714519}
   - component: {fileID: 8662158935682756518}
   m_Layer: 0
@@ -563,22 +562,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 300, y: 300}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &3046022235593654408
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7816056680874728504}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eb44f23d8d33c004b8f2e232aaf5d6e9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  canvas: {fileID: 0}
-  rectTransform: {fileID: 6755606470742560544}
-  canvasGroup: {fileID: 7618997423093714519}
-  DesactiveScript: 0
 --- !u!225 &7618997423093714519
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -604,7 +587,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _isPlayerCard: 0
-  _dragDrop: {fileID: 3046022235593654408}
+  canvasGroup: {fileID: 7618997423093714519}
+  rectTransform: {fileID: 6755606470742560544}
   _name: {fileID: 1406907710409461287}
   _topPower: {fileID: 2437661155386502976}
   _rightPower: {fileID: 8311975188548503210}

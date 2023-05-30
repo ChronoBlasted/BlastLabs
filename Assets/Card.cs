@@ -2,25 +2,36 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class Card : MonoBehaviour
+public class Card : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IEndDragHandler, IDragHandler
 {
     [SerializeField] bool _isPlayerCard;
-    [SerializeField] DragDrop _dragDrop;
-    CardData _data;
+
+    [SerializeField] CanvasGroup canvasGroup;
+    [SerializeField] RectTransform rectTransform;
 
     [SerializeField] TMP_Text _name;
     [SerializeField] TMP_Text _topPower, _rightPower, _bottomPower, _leftPower;
     [SerializeField] Image _bg;
 
+    bool _isDraggable;
+
     public CardData Data { get => _data; }
     public bool IsPlayerCard { get => _isPlayerCard; }
 
+
+    //Cache
+    CardData _data;
+    float _mainScaleFactor;
+
     public void Init(CardData data, bool isPlayerCard)
     {
+        _mainScaleFactor = UIManager.Instance.MainCanvas.scaleFactor;
+
         _data = data;
-        _dragDrop.enabled = true;
+        _isDraggable = true;
         _isPlayerCard = isPlayerCard;
 
         _topPower.text = _data.TopPower.ToString();
@@ -31,10 +42,9 @@ public class Card : MonoBehaviour
         _name.text = _data.Name;
     }
 
-    public void CardDrop(bool instant = false)
+    public void CardDropped(bool instant = false)
     {
-        if (instant) _dragDrop.enabled = false;
-        _dragDrop.DesactiveScript = true;
+        _isDraggable = false;
     }
 
     public void ChangeOwner()
@@ -64,5 +74,33 @@ public class Card : MonoBehaviour
     public int GetRightPower()
     {
         return _data.RightPower;
+    }
+
+    public void OnBeginDrag(PointerEventData eventData)
+    {
+        if (_isDraggable == false) return;
+
+        canvasGroup.alpha = .6f;
+        canvasGroup.blocksRaycasts = false;
+    }
+
+    public void OnDrag(PointerEventData eventData)
+    {
+        if (_isDraggable == false) return;
+
+        rectTransform.anchoredPosition += eventData.delta / _mainScaleFactor;
+    }
+
+    public void OnEndDrag(PointerEventData eventData)
+    {
+        if (_isDraggable == false) return;
+
+        canvasGroup.alpha = 1f;
+        canvasGroup.blocksRaycasts = true;
+        rectTransform.localPosition = Vector3.zero;
+    }
+
+    public void OnPointerDown(PointerEventData eventData)
+    {
     }
 }

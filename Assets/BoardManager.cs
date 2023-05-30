@@ -59,99 +59,90 @@ public class BoardManager : MonoSingleton<BoardManager>
         _turnTXT.text = TurnText;
     }
 
-    public bool DropCard(int position, int indexOfCard, bool isPlayerOrOponent)
+    public void DropCard(int position, int indexOfCard, bool isPlayerOrOponent)
     {
         BoardSlot currentSlot = _boardSlots[position];
 
-        if (currentSlot.IsOccupied)
+        if (currentSlot.IsOccupied == false)
         {
-            Debug.Log("Can't drop card here !");
-            return false;
-        }
-        else
-        {
-            Debug.Log("UpdateBoard");
-
             currentSlot.DropCard(indexOfCard, isPlayerOrOponent);
-
-            return true;
         }
+
+        UpdateAdjacentCard(position, isPlayerOrOponent);
     }
 
-    public bool UpdateAdjacentCard(int position, bool isOpponentDropping)
+    public void UpdateAdjacentCard(int position, bool isPlayerOrOponent)
     {
         Debug.Log("Update adjacent");
 
         switch (position)
         {
             case 0:
-                CheckPower(isOpponentDropping, position, DIRECTION.RIGHT);
-                CheckPower(isOpponentDropping, position, DIRECTION.BOTTOM);
+                CheckPower(isPlayerOrOponent, position, DIRECTION.RIGHT);
+                CheckPower(isPlayerOrOponent, position, DIRECTION.BOTTOM);
                 break;
             case 1:
-                CheckPower(isOpponentDropping, position, DIRECTION.RIGHT);
-                CheckPower(isOpponentDropping, position, DIRECTION.BOTTOM);
-                CheckPower(isOpponentDropping, position, DIRECTION.LEFT);
+                CheckPower(isPlayerOrOponent, position, DIRECTION.RIGHT);
+                CheckPower(isPlayerOrOponent, position, DIRECTION.BOTTOM);
+                CheckPower(isPlayerOrOponent, position, DIRECTION.LEFT);
                 break;
             case 2:
-                CheckPower(isOpponentDropping, position, DIRECTION.BOTTOM);
-                CheckPower(isOpponentDropping, position, DIRECTION.LEFT);
+                CheckPower(isPlayerOrOponent, position, DIRECTION.BOTTOM);
+                CheckPower(isPlayerOrOponent, position, DIRECTION.LEFT);
                 break;
             case 3:
-                CheckPower(isOpponentDropping, position, DIRECTION.TOP);
-                CheckPower(isOpponentDropping, position, DIRECTION.RIGHT);
-                CheckPower(isOpponentDropping, position, DIRECTION.BOTTOM);
+                CheckPower(isPlayerOrOponent, position, DIRECTION.TOP);
+                CheckPower(isPlayerOrOponent, position, DIRECTION.RIGHT);
+                CheckPower(isPlayerOrOponent, position, DIRECTION.BOTTOM);
                 break;
             case 4:
-                CheckPower(isOpponentDropping, position, DIRECTION.TOP);
-                CheckPower(isOpponentDropping, position, DIRECTION.RIGHT);
-                CheckPower(isOpponentDropping, position, DIRECTION.BOTTOM);
-                CheckPower(isOpponentDropping, position, DIRECTION.LEFT);
+                CheckPower(isPlayerOrOponent, position, DIRECTION.TOP);
+                CheckPower(isPlayerOrOponent, position, DIRECTION.RIGHT);
+                CheckPower(isPlayerOrOponent, position, DIRECTION.BOTTOM);
+                CheckPower(isPlayerOrOponent, position, DIRECTION.LEFT);
                 break;
             case 5:
-                CheckPower(isOpponentDropping, position, DIRECTION.TOP);
-                CheckPower(isOpponentDropping, position, DIRECTION.BOTTOM);
-                CheckPower(isOpponentDropping, position, DIRECTION.LEFT);
+                CheckPower(isPlayerOrOponent, position, DIRECTION.TOP);
+                CheckPower(isPlayerOrOponent, position, DIRECTION.BOTTOM);
+                CheckPower(isPlayerOrOponent, position, DIRECTION.LEFT);
                 break;
             case 6:
-                CheckPower(isOpponentDropping, position, DIRECTION.TOP);
-                CheckPower(isOpponentDropping, position, DIRECTION.RIGHT);
+                CheckPower(isPlayerOrOponent, position, DIRECTION.TOP);
+                CheckPower(isPlayerOrOponent, position, DIRECTION.RIGHT);
                 break;
             case 7:
-                CheckPower(isOpponentDropping, position, DIRECTION.TOP);
-                CheckPower(isOpponentDropping, position, DIRECTION.RIGHT);
-                CheckPower(isOpponentDropping, position, DIRECTION.LEFT);
+                CheckPower(isPlayerOrOponent, position, DIRECTION.TOP);
+                CheckPower(isPlayerOrOponent, position, DIRECTION.RIGHT);
+                CheckPower(isPlayerOrOponent, position, DIRECTION.LEFT);
                 break;
             case 8:
-                CheckPower(isOpponentDropping, position, DIRECTION.TOP);
-                CheckPower(isOpponentDropping, position, DIRECTION.LEFT);
+                CheckPower(isPlayerOrOponent, position, DIRECTION.TOP);
+                CheckPower(isPlayerOrOponent, position, DIRECTION.LEFT);
                 break;
         }
 
         UpdateScore();
-
-        return CheckIfBoardFull();
     }
 
-    void CheckPower(bool isOpponentDropping, int position, DIRECTION direction)
+    void CheckPower(bool isPlayerOrOponent, int position, DIRECTION direction)
     {
         switch (direction)
         {
             case DIRECTION.TOP:
                 if (_boardSlots[position - 3].CurrentCard == null) return;
-                if (_boardSlots[position - 3].CurrentCard.IsPlayerCard == isOpponentDropping && _boardSlots[position].CurrentCard.GetTopPower() > _boardSlots[position - 3].CurrentCard.GetBotPower()) _boardSlots[position - 3].CurrentCard.ChangeOwner();
+                if (_boardSlots[position - 3].CurrentCard.IsPlayerCard == isPlayerOrOponent && _boardSlots[position].CurrentCard.GetTopPower() > _boardSlots[position - 3].CurrentCard.GetBotPower()) _boardSlots[position - 3].CurrentCard.ChangeOwner();
                 break;
             case DIRECTION.BOTTOM:
                 if (_boardSlots[position + 3].CurrentCard == null) return;
-                if (_boardSlots[position + 3].CurrentCard.IsPlayerCard == isOpponentDropping && _boardSlots[position].CurrentCard.GetBotPower() > _boardSlots[position + 3].CurrentCard.GetTopPower()) _boardSlots[position + 3].CurrentCard.ChangeOwner();
+                if (_boardSlots[position + 3].CurrentCard.IsPlayerCard == isPlayerOrOponent && _boardSlots[position].CurrentCard.GetBotPower() > _boardSlots[position + 3].CurrentCard.GetTopPower()) _boardSlots[position + 3].CurrentCard.ChangeOwner();
                 break;
             case DIRECTION.LEFT:
                 if (_boardSlots[position - 1].CurrentCard == null) return;
-                if (_boardSlots[position - 1].CurrentCard.IsPlayerCard == isOpponentDropping && _boardSlots[position].CurrentCard.GetLeftPower() > _boardSlots[position - 1].CurrentCard.GetRightPower()) _boardSlots[position - 1].CurrentCard.ChangeOwner();
+                if (_boardSlots[position - 1].CurrentCard.IsPlayerCard == isPlayerOrOponent && _boardSlots[position].CurrentCard.GetLeftPower() > _boardSlots[position - 1].CurrentCard.GetRightPower()) _boardSlots[position - 1].CurrentCard.ChangeOwner();
                 break;
             case DIRECTION.RIGHT:
                 if (_boardSlots[position + 1].CurrentCard == null) return;
-                if (_boardSlots[position + 1].CurrentCard.IsPlayerCard == isOpponentDropping && _boardSlots[position].CurrentCard.GetRightPower() > _boardSlots[position + 1].CurrentCard.GetLeftPower()) _boardSlots[position + 1].CurrentCard.ChangeOwner();
+                if (_boardSlots[position + 1].CurrentCard.IsPlayerCard == isPlayerOrOponent && _boardSlots[position].CurrentCard.GetRightPower() > _boardSlots[position + 1].CurrentCard.GetLeftPower()) _boardSlots[position + 1].CurrentCard.ChangeOwner();
                 break;
         }
     }
@@ -171,24 +162,5 @@ public class BoardManager : MonoSingleton<BoardManager>
         }
 
         UIManager.Instance.GamePanel.UpdateScore(_playerScore, _opponentScore);
-    }
-
-    bool CheckIfBoardFull()
-    {
-        bool isBoardFull = true;
-        foreach (var slot in _boardSlots)
-        {
-            if (slot.CurrentCard == null) isBoardFull = false;
-        }
-
-        bool hasPlayerWin;
-
-        if (_playerScore > _opponentScore) hasPlayerWin = true;
-        else hasPlayerWin = false;
-
-        if (isBoardFull) NakamaManager.Instance.MatchManager.MatchEnd(hasPlayerWin);
-
-
-        return isBoardFull;
     }
 }
