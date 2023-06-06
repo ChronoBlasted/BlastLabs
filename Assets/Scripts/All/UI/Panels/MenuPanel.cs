@@ -4,9 +4,12 @@ using UnityEngine;
 
 public class MenuPanel : Panel
 {
+    [SerializeField] TabBar _tabBar;
     public override void Init()
     {
         base.Init();
+
+        _tabBar.Init();
     }
 
     public override void OpenPanel()

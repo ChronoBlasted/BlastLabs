@@ -1,10 +1,32 @@
 let InitModule: nkruntime.InitModule = function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk: nkruntime.Nakama, initializer: nkruntime.Initializer) {
-    // Hooks
 
+    // Set up hooks.
     initializer.registerAfterAuthenticateDevice(afterAuthenticate);
     initializer.registerAfterAuthenticateFacebook(afterAuthenticate);
+    initializer.registerAfterAuthenticateEmail(afterAuthenticate);
 
-    logger.info('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+    // Set up RPCs
+
+    // Blast
+    initializer.registerRpc('swap_deck_card', rpcSwapDeckCard);
+    initializer.registerRpc('upgrade_card', rpcUpgradeCard);
+    initializer.registerRpc('load_user_cards', rpcLoadUserCards);
+    initializer.registerRpc('add_random_card', rpcBuyRandomCard);
+
+    // Match
+    initializer.registerRpc('search_match', rpcFindOrCreateMatch);
+
+    initializer.registerMatch('duel', {
+        matchInit,
+        matchJoinAttempt,
+        matchJoin,
+        matchLeave,
+        matchLoop,
+        matchSignal,
+        matchTerminate
+    });
+    
+    logger.warn('XXXXXXXXXXXXXXXXXXXX - Blast Labs TypeScript loaded - XXXXXXXXXXXXXXXXXXXX');
 }
 
 function afterAuthenticate(ctx: nkruntime.Context, logger: nkruntime.Logger, nk: nkruntime.Nakama, data: nkruntime.Session) {
@@ -14,14 +36,14 @@ function afterAuthenticate(ctx: nkruntime.Context, logger: nkruntime.Logger, nk:
     }
 
     let user_id = ctx.userId;
-    let username = "Player_" + ctx.username;
+    let username = "Player" + ctx.username;
     let metadata = {
-        vip: false,
+        battle_pass: false,
         win: 0,
         loose: 0,
-        blast_captured: 0,
-        blast_defeated: 0,
+        total_card: 0,
     };
+
     let displayName = "NewPlayer";
     let timezone = null;
     let location = null;
@@ -33,6 +55,22 @@ function afterAuthenticate(ctx: nkruntime.Context, logger: nkruntime.Logger, nk:
         'gems': 0,
         'rank': 0,
     };
+
+    const writeCards: nkruntime.StorageWriteRequest = {
+        collection: DeckCollectionName,
+        key: DeckCollectionKey,
+        permissionRead: DeckPermissionRead,
+        permissionWrite: DeckPermissionWrite,
+        value: defaultCardCollection(nk, logger, ctx.userId),
+        userId: ctx.userId,
+    }
+
+    try {
+        nk.storageWrite([writeCards]);
+    } catch (error) {
+        logger.error('storageWrite error: %q', error);
+        throw error;
+    }
 
     try {
         nk.walletUpdate(user_id, changeset);

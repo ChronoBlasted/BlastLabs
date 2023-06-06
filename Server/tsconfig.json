@@ -1,6 +1,12 @@
 {
   "files": [
-      "src/main.ts"
+      "src/main.ts",
+      "src/blast.ts",
+      "src/blastpedia.ts",
+      "src/economy.ts",
+      "src/match.ts",
+      "src/matchmaker.ts",
+      "src/opcodes.ts",
     ],
   "compilerOptions": {
     "target": "es5",
