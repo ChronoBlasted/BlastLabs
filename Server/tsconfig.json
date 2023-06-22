@@ -9,7 +9,7 @@
       "src/opcodes.ts",
     ],
   "compilerOptions": {
-    "target": "es5",
+    "target": "ES5",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,

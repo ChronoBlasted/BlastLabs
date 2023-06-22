@@ -1,6 +1,8 @@
 using BaseTemplate.Behaviours;
 using DG.Tweening.Core.Easing;
 using Nakama;
+using Nakama.Snippets;
+using Nakama.TinyJson;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -8,6 +10,7 @@ using System.Linq;
 using System.Net.Sockets;
 using System.Net.WebSockets;
 using System.Threading.Tasks;
+using System.Xml;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SocialPlatforms.Impl;
@@ -17,10 +20,11 @@ public class MatchmakingManager : MonoSingleton<MatchmakingManager>
     NakamaManager _nakamaManager;
     GameManager _gameManager;
 
-    IMatchmakerTicket _matchmakerTicket;
-
-    IUserPresence _localPresence, _oponentPresence, _hostPresence;
     IMatch _match;
+    IUserPresence _localPresence, _opponentPresence;
+    string _matchId;
+
+    public IMatch Match { get => _match; }
 
     public async Task Init()
     {
@@ -34,52 +38,45 @@ public class MatchmakingManager : MonoSingleton<MatchmakingManager>
         await socket.ConnectAsync(_nakamaManager.Session, appearOnline, connectionTimeout);
 
         _nakamaManager.SetSocket(socket);
-
-        socket.ReceivedMatchmakerMatched += OnReceivedMatchmakerMatched;
     }
 
     #region SearchMatch
     public async void FindMatch()
     {
-        var query = "*";
-        var minCount = 2;
-        var maxCount = 2;
-        var matchmakerTicket = await _nakamaManager.Socket.AddMatchmakerAsync(query, minCount, maxCount);
+        try
+        {
+            var response = await _nakamaManager.Client.RpcAsync(_nakamaManager.Session, "search_match");
+            _matchId = response.Payload.FromJson<MatchMakerMatchIdResponse>().matchId;
 
-        _matchmakerTicket = matchmakerTicket;
+            _match = await _nakamaManager.Socket.JoinMatchAsync(_matchId);
 
-        Debug.Log("Searching for a match with ticket : " + matchmakerTicket);
+            _nakamaManager.MatchManager.StartNewMatch(_match);
+
+            await _nakamaManager.Socket.SendMatchStateAsync(_matchId, OPCodes.READY_STATE, "");
+        }
+        catch (ApiResponseException e)
+        {
+            Debug.LogWarning("Could not join / find match: " + e.Message);
+        }
     }
+
 
     public async Task CancelMatchmaking()
     {
-        await _nakamaManager.Socket.RemoveMatchmakerAsync(_matchmakerTicket);
-    }
+        await _nakamaManager.Socket.LeaveMatchAsync(_matchId);
 
-    async void OnReceivedMatchmakerMatched(IMatchmakerMatched matched)
-    {
-        var match = await _nakamaManager.Socket.JoinMatchAsync(matched);
-
-        _match = match;
-
-        _localPresence = matched.Self.Presence;
-
-        _hostPresence = matched.Users.OrderBy(x => x.Presence.SessionId).First().Presence;
-
-        foreach (var user in matched.Users)
-        {
-            if (user.Presence.UserId != _localPresence.UserId) _oponentPresence = user.Presence;
-        }
-
-        _gameManager.UpdateStateToGame();
-
-        UnityMainThreadDispatcher.Instance.Enqueue(() => _nakamaManager.MatchManager.StartNewMatch(_match, _localPresence, _oponentPresence, _hostPresence));
+        _matchId = null;
     }
 
     public async void LeaveMatch()
     {
-        await _nakamaManager.Socket.LeaveMatchAsync(_match.Id);
+        await _nakamaManager.Socket.LeaveMatchAsync(_matchId);
     }
 
     #endregion
+}
+
+public class MatchMakerMatchIdResponse
+{
+    public string matchId;
 }

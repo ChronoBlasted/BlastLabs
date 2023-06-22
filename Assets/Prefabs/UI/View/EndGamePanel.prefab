@@ -172,12 +172,12 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
       - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: EndGamePanel, Assembly-CSharp
-        m_MethodName: 
+        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+        m_MethodName: UpdateStateToMenu
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -582,11 +582,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5551032346564884051, guid: f89c8c17670d86844aa2afa427a54354, type: 3}
       propertyPath: m_Name
-      value: EndGamePanel
+      value: EndGame
       objectReference: {fileID: 0}
     - target: {fileID: 5551032346564884053, guid: f89c8c17670d86844aa2afa427a54354, type: 3}
       propertyPath: m_Alpha
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5551032346769113123, guid: f89c8c17670d86844aa2afa427a54354, type: 3}
       propertyPath: m_AnchorMax.y

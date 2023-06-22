@@ -15,13 +15,11 @@ public enum DIRECTION
 
 public class BoardManager : MonoSingleton<BoardManager>
 {
-    [SerializeField] TMP_Text _turnTXT;
     [SerializeField] Card _playerCard;
     [SerializeField] List<GameObject> _cardSpawnTransform;
     [SerializeField] List<BoardSlot> _boardSlots = new List<BoardSlot>();
 
     int _playerScore, _opponentScore;
-    public TMP_Text TurnTXT { get => _turnTXT; }
 
     void ResetBoard()
     {
@@ -56,7 +54,7 @@ public class BoardManager : MonoSingleton<BoardManager>
 
     public void UpdateTurnText(string TurnText)
     {
-        _turnTXT.text = TurnText;
+        UIManager.Instance.GamePanel.UpdateTurnText(TurnText);
     }
 
     public void DropCard(int position, int indexOfCard, bool isPlayerOrOponent)

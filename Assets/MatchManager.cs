@@ -7,6 +7,7 @@ using System.Net.Sockets;
 using System.Reflection.Emit;
 using System.Text;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using Random = UnityEngine.Random;
 
 public enum MATCH_STATE { WAIT, PLAYER_TURN, OPONENT_TURN, ENDED }
@@ -14,30 +15,30 @@ public enum MATCH_STATE { WAIT, PLAYER_TURN, OPONENT_TURN, ENDED }
 public class MatchManager : MonoSingleton<MatchManager>
 {
     NakamaManager _nakamaManager;
+    GameManager _gameManager;
+    UIManager _uIManager;
 
     MATCH_STATE _matchState;
 
     IMatch _match;
-    IUserPresence _localPresence, _oponentPresence, _hostPresence;
+    IUserPresence _localPresence, _opponentPresence;
 
     List<CardData> _myDeck;
 
     public void Init()
     {
         _nakamaManager = NakamaManager.Instance;
+        _gameManager = GameManager.Instance;
+        _uIManager = UIManager.Instance;
 
         _nakamaManager.Socket.ReceivedMatchState += m => UnityMainThreadDispatcher.Instance.Enqueue(() => OnReceivedMatchState(m));
     }
 
-    public void StartNewMatch(IMatch newMatch, IUserPresence localPresence, IUserPresence oponentPresence, IUserPresence hostPresence)
+    public void StartNewMatch(IMatch newMatch)
     {
         _match = newMatch;
-        _localPresence = localPresence;
-        _oponentPresence = oponentPresence;
-        _hostPresence = hostPresence;
 
         UIManager.Instance.GamePanel.DisablePlayerCards();
-
     }
 
     private void OnReceivedMatchState(IMatchState matchState)
@@ -49,9 +50,27 @@ public class MatchManager : MonoSingleton<MatchManager>
 
         switch (matchState.OpCode)
         {
-            case OPCodes.UPDATE_TURN:
+            case OPCodes.MATCH_START:
+                UIManager.Instance.GamePanel.DisablePlayerCards();
+
+                _localPresence = _match.Self;
+
+                foreach (var user in _match.Presences)
+                {
+                    Debug.Log("userName : " + user.Username);
+                    if (user.UserId != _localPresence.UserId)
+                    {
+                        _opponentPresence = user;
+                    }
+                }
+
+                _gameManager.UpdateStateToGame();
+                break;
+
+            case OPCodes.WHO_START:
                 UpdateTurn(messageJson);
                 break;
+
             case OPCodes.PLAYER_DROP_CARD:
                 var positionState = JsonParser.FromJson<PositionState>(messageJson);
                 UpdateBoard(positionState);
@@ -79,21 +98,21 @@ public class MatchManager : MonoSingleton<MatchManager>
 
     void UpdateTurn(string sessionIdOfPlayerTurn)
     {
-        if (sessionIdOfPlayerTurn == _localPresence.SessionId)
+        if (_localPresence.UserId == sessionIdOfPlayerTurn)
         {
             _matchState = MATCH_STATE.PLAYER_TURN;
 
-            UIManager.Instance.GamePanel.ActivePlayerCards();
+            _uIManager.GamePanel.ActivePlayerCards();
 
-            BoardManager.Instance.UpdateTurnText(_localPresence.Username + " turn's");
+            _uIManager.GamePanel.UpdateTurnText("your turn");
         }
         else
         {
             _matchState = MATCH_STATE.OPONENT_TURN;
 
-            UIManager.Instance.GamePanel.DisablePlayerCards();
+            _uIManager.GamePanel.DisablePlayerCards();
 
-            BoardManager.Instance.UpdateTurnText(_oponentPresence.Username + " turn's");
+            _uIManager.GamePanel.UpdateTurnText(_opponentPresence.Username + " turn's");
         }
     }
 
@@ -101,7 +120,7 @@ public class MatchManager : MonoSingleton<MatchManager>
     {
         _matchState = MATCH_STATE.ENDED;
 
-        UIManager.Instance.GamePanel.DisablePlayerCards();
+        _uIManager.GamePanel.DisablePlayerCards();
 
         if (playerHaveWin)
         {
@@ -123,4 +142,11 @@ public class PositionState
 {
     public int Position;
     public int IndexOfCard;
+}
+
+[Serializable]
+public class MatchStartData
+{
+    public int RoundTimer;
+    public List<IUserPresence> Presences;
 }

@@ -3,9 +3,9 @@ const matchInit = function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk
 
 
     return {
-        state: { presences: {}, emptyTicks: 0, started: false },
+        state: { presences: {}, emptyTicks: 0, started: false, countReadyPing: 0 },
         tickRate: 1, // 1 tick per second = 1 MatchLoop func invocations per second
-        label: 'duel'
+        label: 'duel',
     };
 };
 
@@ -26,9 +26,6 @@ const matchJoinAttempt = function (ctx: nkruntime.Context, logger: nkruntime.Log
     };
 }
 
-
-
-
 const matchJoin = function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk: nkruntime.Nakama, dispatcher: nkruntime.MatchDispatcher, tick: number, state: nkruntime.MatchState, presences: nkruntime.Presence[]): { state: nkruntime.MatchState } | null {
     presences.forEach(function (presence) {
         state.presences[presence.userId] = presence;
@@ -38,27 +35,27 @@ const matchJoin = function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk
     logger.debug('presences LENGTHHHHHHHHHHHHH :' + Object.keys(state.presences).length);
 
 
-    if (Object.keys(state.presences).length === 2) {
+    // if (Object.keys(state.presences).length === 2) {
 
-        // Match Started
-        state.started = true;
-        dispatcher.broadcastMessage(OPCODE_matchStart, JSON.stringify(matchStartData), null, null, true);
+    //     // Match Started
+    //     state.started = true;
+    //     dispatcher.broadcastMessage(OPCODE_matchStart, JSON.stringify(matchStartData), null, null, true);
 
 
-        // Who Start
-        const playerIDs = Object.keys(state.presences);
-        const randomIndex = Math.floor(Math.random() * playerIDs.length);
-        const starterUserID = playerIDs[randomIndex];
-        dispatcher.broadcastMessage(OPCODE_whoStart, JSON.stringify(starterUserID), null, null, true);
+    //     // Who Start
+    //     const playerIDs = Object.keys(state.presences);
+    //     const randomIndex = Math.floor(Math.random() * playerIDs.length);
+    //     const starterUserID = playerIDs[randomIndex];
+    //     dispatcher.broadcastMessage(OPCODE_whoStart, JSON.stringify(starterUserID), null, null, true);
 
-        // Players deck
+    //     // Players deck
 
-        presences.forEach(function (presence) {
-            // get random hand
-            presence.userId
-        });
+    //     presences.forEach(function (presence) {
+    //         // get random hand
+    //         presence.userId
+    //     });
 
-    }
+    // }
 
     return {
         state
@@ -77,8 +74,6 @@ const matchLeave = function (ctx: nkruntime.Context, logger: nkruntime.Logger, n
 }
 
 const matchLoop = function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk: nkruntime.Nakama, dispatcher: nkruntime.MatchDispatcher, tick: number, state: nkruntime.MatchState, messages: nkruntime.MatchMessage[]): { state: nkruntime.MatchState } | null {
-    logger.debug('Lobby match loop executed');
-    logger.debug('presences LENGTHHHHHHHHHHHHH :' + Object.keys(state.presences).length);
 
     if (Object.keys(state.presences).length === 0) {
         state.emptyTicks++;
@@ -88,19 +83,26 @@ const matchLoop = function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk
         return null;
     }
 
-    Object.keys(state.presences).forEach(function (key) {
-        const presence = state.presences[key];
-        logger.info('Presence %v name $v', presence.userId, presence.username);
-    });
-
     messages.forEach(function (message) {
         logger.info('Received %v from %v', message.data, message.sender.userId);
 
-        if (message.opCode === OPCODE_playersDeck) 
-        {
+        if (message.opCode === OPCODE_readyState) {
+            state.countReadyPing++;
 
+            if (state.countReadyPing == 2) {
+                dispatcher.broadcastMessage(OPCODE_matchStart, JSON.stringify(matchStartData), null, null, true);
+
+                const playerIDs = Object.keys(state.presences);
+                const randomIndex = Math.floor(Math.random() * playerIDs.length);
+                const starterUserID = playerIDs[randomIndex];
+
+                dispatcher.broadcastMessage(OPCODE_whoStart, starterUserID, null, null, true);
+            }
         }
 
+        if (message.opCode === OPCODE_playerDropCard) {
+
+        }
     });
 
     return {
@@ -129,5 +131,5 @@ const matchSignal = function (ctx: nkruntime.Context, logger: nkruntime.Logger, 
 }
 
 const matchStartData = {
-    roundTimer: 45
+    roundTimer: 45,
 };

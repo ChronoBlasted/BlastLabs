@@ -15,6 +15,6 @@ function rpcFindOrCreateMatch(context: nkruntime.Context, logger: nkruntime.Logg
     }
 
     var matchId = nk.matchCreate('duel', {});
-    return JSON.stringify({ matchId });
+    return JSON.stringify({ matchId }); // Changer pas besoin de faire du JSON
 }
 

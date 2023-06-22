@@ -528,6 +528,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3248088033916941064, guid: 608f325a8f84a404d8326a2ec7a80b95, type: 3}
+      propertyPath: m_text
+      value: CLAN
+      objectReference: {fileID: 0}
     - target: {fileID: 3339414167438070039, guid: 608f325a8f84a404d8326a2ec7a80b95, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -639,6 +643,10 @@ PrefabInstance:
     - target: {fileID: 4346716869032092404, guid: 608f325a8f84a404d8326a2ec7a80b95, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4594856426872764198, guid: 608f325a8f84a404d8326a2ec7a80b95, type: 3}
+      propertyPath: m_text
+      value: BATTLE
       objectReference: {fileID: 0}
     - target: {fileID: 4787472619704237131, guid: 608f325a8f84a404d8326a2ec7a80b95, type: 3}
       propertyPath: m_AnchorMax.y
@@ -896,6 +904,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5210080359085506966, guid: 608f325a8f84a404d8326a2ec7a80b95, type: 3}
+      propertyPath: m_text
+      value: SQUAD
+      objectReference: {fileID: 0}
     - target: {fileID: 5364050854674980374, guid: 608f325a8f84a404d8326a2ec7a80b95, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -1088,6 +1100,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6571256501686734826, guid: 608f325a8f84a404d8326a2ec7a80b95, type: 3}
+      propertyPath: m_text
+      value: SHOP
+      objectReference: {fileID: 0}
     - target: {fileID: 6588862340274038736, guid: 608f325a8f84a404d8326a2ec7a80b95, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -1111,6 +1127,10 @@ PrefabInstance:
     - target: {fileID: 6588862340274038736, guid: 608f325a8f84a404d8326a2ec7a80b95, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6743934471881285550, guid: 608f325a8f84a404d8326a2ec7a80b95, type: 3}
+      propertyPath: m_text
+      value: EVENT
       objectReference: {fileID: 0}
     - target: {fileID: 6960948776420633453, guid: 608f325a8f84a404d8326a2ec7a80b95, type: 3}
       propertyPath: m_AnchorMax.y

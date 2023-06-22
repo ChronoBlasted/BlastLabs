@@ -75,8 +75,10 @@ public class NakamaManager : MonoSingleton<NakamaManager>
 
 public static class OPCodes
 {
-    public const long UPDATE_TURN = 1;
-    public const long PLAYER_DROP_CARD = 2;
-    public const long PLAYER_DROP_TRAP = 3;
-    public const long MATCH_END = 4;
+    public const long READY_STATE = 1;
+    public const long MATCH_START = 2;
+    public const long WHO_START = 3;
+    public const long PLAYER_DECKS = 3;
+    public const long PLAYER_DROP_CARD = 4;
+    public const long MATCH_END = 5;
 }
