@@ -9,7 +9,7 @@ Celui qui a la **plus grande puissance** remporte la carte de l’adversaire.
 ---
 
 ## 🚀 Fonctionnalités  
-✅ **Mode multijoueur** basé sur un système *serveur-client* *(Nakama, Mirror, Photon, etc.)*  
+✅ **Mode multijoueur** basé sur un système *serveur-client* *(Nakama)*  
 ✅ **Système de duels** entre cartes adjacentes  
 ✅ **Gestion des tours** et des règles de capture  
 ✅ **Affichage dynamique** des changements de possession des cartes  
@@ -30,6 +30,6 @@ Celui qui a la **plus grande puissance** remporte la carte de l’adversaire.
 
 ## 🛠️ Technologies utilisées  
 🔹 **Unity** - Moteur de jeu  
-🔹 **Mirror / Photon / Nakama** - Gestion du multijoueur  
+🔹 **Nakama** - Gestion du multijoueur  
 🔹 **C#** - Développement du gameplay  
 🔹 **Unity UI** - Interface utilisateur  
